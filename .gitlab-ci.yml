@@ -24,7 +24,7 @@ SAST-clean:
 
 SAST-translate:
   stage: translate
-  needs: [ clean ]
+  needs: [ SAST-clean ]
   script:
     - sourceanalyzer -verbose -b $FTFY_BUILD ./mvnw package
   tags:
@@ -32,7 +32,7 @@ SAST-translate:
 
 SAST-scan:
   stage: scan
-  needs: [ translate ]
+  needs: [ SAST-translate ]
   script:
     - sourceanalyzer -verbose -b $FTFY_BUILD -scan -f $FTFY_FPR_FILE
   artifacts:
@@ -45,7 +45,7 @@ SAST-scan:
 SAST-upload:
   stage: upload
   dependencies:
-    - scan
+    - SAST-scan
   script:
     - fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application $FTFY_PROJECT -applicationVersion $CI_COMMIT_BRANCH -file $FTFY_FPR_FILE
   tags:
