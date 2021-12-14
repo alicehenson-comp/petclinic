@@ -1,0 +1,52 @@
+stages:
+  - clean
+  - translate
+  - scan
+  - upload
+  - docker_push
+  - docker_rm
+
+variables:
+  DOCKER_REGISTRY: docker.ekseed.org
+  IMAGE_NAME: ${CI_PROJECT_NAME}
+  FTFY_PROJECT: "BodgeIt"
+  FTFY_BUILD: "$FTFY_PROJECT-$CI_COMMIT_BRANCH"
+  FTFY_FPR_FILE: "$CI_COMMIT_SHORT_SHA-gitlab_com-$FTFY_BUILD.fpr"
+  FTFY_SSC_URL: "https://ssc.ekseed.org/ssc"
+
+
+SAST-clean:
+  stage: clean
+  script:
+    - sourceanalyzer -verbose -b $FTFY_BUILD -clean
+  tags:
+    - fortify-ubuntu
+
+SAST-translate:
+  stage: translate
+  needs: [ clean ]
+  script:
+    - sourceanalyzer -verbose -b $FTFY_BUILD ./mvnw package
+  tags:
+    - fortify-ubuntu
+
+SAST-scan:
+  stage: scan
+  needs: [ translate ]
+  script:
+    - sourceanalyzer -verbose -b $FTFY_BUILD -scan -f $FTFY_FPR_FILE
+  artifacts:
+    name: FPR_FILE
+    paths:
+      - $FTFY_FPR_FILE
+  tags:
+    - fortify-ubuntu
+
+SAST-upload:
+  stage: upload
+  dependencies:
+    - scan
+  script:
+    - fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application $FTFY_PROJECT -applicationVersion $CI_COMMIT_BRANCH -file $FTFY_FPR_FILE
+  tags:
+    - fortify-ubuntu
