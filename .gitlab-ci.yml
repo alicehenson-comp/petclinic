@@ -18,7 +18,7 @@ SAST-scan:
   script:
     - sourceanalyzer -verbose -b $FTFY_BUILD -clean
     - ./mvnw package
-    - sourceanalyzer -verbose -b $FTFY_BUILD target
+    - sourceanalyzer -verbose -b $FTFY_BUILD .
     - sourceanalyzer -verbose -b $FTFY_BUILD -show-files
     - sourceanalyzer -verbose -b $FTFY_BUILD -scan -f $FTFY_FPR_FILE
   artifacts:
