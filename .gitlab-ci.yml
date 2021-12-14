@@ -16,11 +16,11 @@ variables:
 SAST-scan:
   stage: scan
   script:
-    - sourceanalyzer -verbose -b $FTFY_BUILD -clean
+    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD -clean
     - ./mvnw package
-    - sourceanalyzer -verbose -b $FTFY_BUILD .
-    - sourceanalyzer -verbose -b $FTFY_BUILD -show-files
-    - sourceanalyzer -verbose -b $FTFY_BUILD -scan -f $FTFY_FPR_FILE
+    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD .
+    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD -show-files
+    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD -scan -f $FTFY_FPR_FILE
   artifacts:
     name: FPR_FILE
     paths:
@@ -36,6 +36,6 @@ SAST-upload:
   script:
     - echo $FTFY_PROJECT
     - echo $CI_COMMIT_BRANCH
-    - fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application $FTFY_PROJECT -applicationVersion $CI_COMMIT_BRANCH -file $FTFY_FPR_FILE
+    - /fortify/SCA_21.2.1/bin/fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application $FTFY_PROJECT -applicationVersion $CI_COMMIT_BRANCH -file $FTFY_FPR_FILE
   tags:
     - fortify-ubuntu
