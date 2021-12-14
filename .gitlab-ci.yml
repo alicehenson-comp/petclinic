@@ -1,6 +1,4 @@
 stages:
-  - clean
-  - translate
   - scan
   - upload
   - docker_push
@@ -15,27 +13,13 @@ variables:
   FTFY_SSC_URL: "https://ssc.ekseed.org/ssc"
 
 
-SAST-clean:
-  stage: clean
+SAST-scan:
+  stage: scan
   script:
     - sourceanalyzer -verbose -b $FTFY_BUILD -clean
-  tags:
-    - fortify-ubuntu
-
-SAST-translate:
-  stage: translate
-  needs: [ SAST-clean ]
-  script:
     - ./mvnw package
     - sourceanalyzer -verbose -b $FTFY_BUILD target
     - sourceanalyzer -verbose -b $FTFY_BUILD -show-files
-  tags:
-    - fortify-ubuntu
-
-SAST-scan:
-  stage: scan
-  needs: [ SAST-translate ]
-  script:
     - sourceanalyzer -verbose -b $FTFY_BUILD -scan -f $FTFY_FPR_FILE
   artifacts:
     name: FPR_FILE
@@ -43,6 +27,7 @@ SAST-scan:
       - $FTFY_FPR_FILE
   tags:
     - fortify-ubuntu
+
 
 SAST-upload:
   stage: upload
