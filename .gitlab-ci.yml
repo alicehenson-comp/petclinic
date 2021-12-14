@@ -34,6 +34,8 @@ SAST-upload:
   dependencies:
     - SAST-scan
   script:
+    - echo $FTFY_PROJECT
+    - echo $CI_COMMIT_BRANCH
     - fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application $FTFY_PROJECT -applicationVersion $CI_COMMIT_BRANCH -file $FTFY_FPR_FILE
   tags:
     - fortify-ubuntu
