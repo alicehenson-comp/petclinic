@@ -7,7 +7,7 @@ stages:
 variables:
   DOCKER_REGISTRY: docker.ekseed.org
   IMAGE_NAME: ${CI_PROJECT_NAME}
-  FTFY_PROJECT: "BodgeIt"
+  FTFY_PROJECT: "petclinic"
   FTFY_BUILD: "$FTFY_PROJECT-$CI_COMMIT_BRANCH"
   FTFY_FPR_FILE: "$CI_COMMIT_SHORT_SHA-gitlab_com-$FTFY_BUILD.fpr"
   FTFY_SSC_URL: "https://ssc.ekseed.org/ssc"
