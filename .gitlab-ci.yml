@@ -26,7 +26,8 @@ SAST-translate:
   stage: translate
   needs: [ SAST-clean ]
   script:
-    - sourceanalyzer -verbose -b $FTFY_BUILD touchless ./mvnw package
+    - ./mvnw package
+    - sourceanalyzer -verbose -b $FTFY_BUILD target
     - sourceanalyzer -verbose -b $FTFY_BUILD -show-files
   tags:
     - fortify-ubuntu
