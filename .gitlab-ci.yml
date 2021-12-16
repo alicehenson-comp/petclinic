@@ -18,7 +18,7 @@ sast-scan:
   script:
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -clean
     - ./mvnw dependency:copy-dependencies
-    - ls -al target/dependency
+    - sudo chmod 777 -R target/dependency
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -cp target/dependency/*.jar src/main/**/*.java
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -cp target/dependency/*.jar src/main/**/*.jsp
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -show-files
