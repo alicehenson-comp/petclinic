@@ -59,8 +59,8 @@ dast-scan:
 
   script:
     - fcli auth login ssc --url ${FTFY_SSC_URL} --token "${FTFY_ENC_TOKEN}"
-    - fcli dast sc-dast start -s  ${SCDAST_SETTINGS} --url http://fortify-ubuntu.ekseed.org:8880/ -n "petclinic-${CI_COMMIT_BRANCH}" --format json >> start-output.txt
-    - scanid=$(cat start-output.txt | grep -oP "(?<=\"id\" : )\d*")
+    - fcli dast sc-dast start -s  ${SCDAST_SETTINGS} --url http://fortify-ubuntu.ekseed.org:8880/ -n "petclinic-${CI_COMMIT_BRANCH}" --format json > start-output.txt
+    - 'scanid=$(cat start-output.txt | grep -oP "(?<=\"id\" : )\d*")'
     - fcli get sc-dast scan results -i $scanid -w
   tags :
     - docker-exec
