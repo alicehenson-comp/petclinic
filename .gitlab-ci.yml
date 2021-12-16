@@ -18,6 +18,7 @@ SAST-scan:
   script:
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b $FTFY_BUILD -clean
     - ./mvnw dependency:copy-dependencies
+    - ls -al target/dependency
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b $FTFY_BUILD -cp target/dependency/*.jar src/main/**/*.java
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b $FTFY_BUILD -cp target/dependency/*.jar src/main/**/*.jsp
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b $FTFY_BUILD -show-files
