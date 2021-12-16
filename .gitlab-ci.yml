@@ -59,7 +59,10 @@ dast-scan:
   script:
     - fcli auth login ssc --url ${FTFY_SSC_URL} --token "${FTFY_ENC_TOKEN}"
     - fcli dast sc-dast start -s  ${SCDAST_SETTINGS} --url http://fortify-ubuntu.ekseed.org:8880/ -n "petclinic-${CI_COMMIT_BRANCH}" --format json
+    - sudo docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
+    - sudo docker stop petclinic-$CI_COMMIT_SHORT_SHA
+  tags :
+    - docker-exec
 
-  allow_failure: true
 
 
