@@ -22,7 +22,7 @@ ADD https://archive.apache.org/dist/tomcat/tomcat-7/v${TOMCAT_VERSION}/bin/apach
 RUN tar -xvf apache-tomcat-${TOMCAT_VERSION}.tar.gz
 RUN rm apache-tomcat-${TOMCAT_VERSION}.tar.gz
 RUN mv apache-tomcat-${TOMCAT_VERSION} tomcat
-COPY catalina.properties tomcat/conf
+#COPY catalina.properties tomcat/conf
 
 #prepare SSC
 COPY target/petclinic.war /petclinic/tomcat/webapps
