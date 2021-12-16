@@ -74,5 +74,6 @@ stop_app:
     - sudo docker stop petclinic-$CI_COMMIT_SHORT_SHA
   tags:
     - fortify-ubuntu
+    - shell
 
 
