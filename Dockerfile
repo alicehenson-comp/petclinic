@@ -17,8 +17,8 @@ ENV JRE_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
 # Install Tomcat
 WORKDIR /petclinic
-ARG TOMCAT_VERSION="7.0.109"
-ADD https://archive.apache.org/dist/tomcat/tomcat-7/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz .
+ARG TOMCAT_VERSION="9.0.56"
+ADD https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz .
 RUN tar -xvf apache-tomcat-${TOMCAT_VERSION}.tar.gz
 RUN rm apache-tomcat-${TOMCAT_VERSION}.tar.gz
 RUN mv apache-tomcat-${TOMCAT_VERSION} tomcat
