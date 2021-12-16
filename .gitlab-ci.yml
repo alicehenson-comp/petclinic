@@ -18,9 +18,10 @@ sast-scan:
   script:
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -clean
     - ./mvnw dependency:copy-dependencies
-    - sudo chmod 777 -R target/dependency
-    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -cp lib/*.jar src/main/**/*.java
-    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -cp lib/*.jar src/main/**/*.jsp
+    - ./mvnw package
+    - sudo chmod 777 -R *
+    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -cp lib/*.jar **/*.java
+    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -cp lib/*.jar **/*.jsp
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -show-files
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -scan -f "petclinic-${CI_COMMIT_BRANCH}.fpr"
   artifacts:
