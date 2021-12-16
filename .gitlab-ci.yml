@@ -1,8 +1,9 @@
 stages:
   - sast-scan
   - sast-upload
-  - docker_deploy
+  - docker_start
   - dast-scan
+  - docker_stop
 
 variables:
   DOCKER_REGISTRY: docker.ekseed.org
@@ -39,8 +40,8 @@ sast-upload:
   tags:
     - fortify-ubuntu
 
-package_n_build:
-  stage: docker_deploy
+package_n_start:
+  stage: docker_start
   dependencies:
     - sast-scan
   script:
@@ -58,11 +59,19 @@ dast-scan:
 
   script:
     - fcli auth login ssc --url ${FTFY_SSC_URL} --token "${FTFY_ENC_TOKEN}"
-    - fcli dast sc-dast start -s  ${SCDAST_SETTINGS} --url http://fortify-ubuntu.ekseed.org:8880/ -n "petclinic-${CI_COMMIT_BRANCH}" --format json
-    - sudo docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
-    - sudo docker stop petclinic-$CI_COMMIT_SHORT_SHA
+    - fcli dast sc-dast start -s  ${SCDAST_SETTINGS} --url http://fortify-ubuntu.ekseed.org:8880/ -n "petclinic-${CI_COMMIT_BRANCH}" --format json >> start-output.txt
+    - scanid=$(cat start-output.txt | grep -oP "(?<=\"id\" : )\d*")
+    - fcli get sc-dast scan results -i $scanid -w
   tags :
     - docker-exec
 
+stop_app:
+  stage: docker_stop
+  script:
+    ## Login to docker registry
+    - sudo docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
+    - sudo docker stop petclinic-$CI_COMMIT_SHORT_SHA
+  tags:
+    - fortify-ubuntu
 
 
