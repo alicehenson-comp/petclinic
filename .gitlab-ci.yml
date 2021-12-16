@@ -45,6 +45,8 @@ package_n_build:
     - sast-scan
   script:
     - ./mvnw package
+    ## Login to docker registry
+    - sudo docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
     - sudo docker build . -t docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
     - sudo docker run d --name petclinic-$CI_COMMIT_SHORT_SHA --rm -p 8880:8080 docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
   tags:
