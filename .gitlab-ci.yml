@@ -1,20 +1,21 @@
 stages:
-  - scan
-  - upload
-  - docker_push
-  - docker_rm
+  - sast-scan
+  - sast-upload
+  - docker_deploy
+  - dast-scan
 
 variables:
   DOCKER_REGISTRY: docker.ekseed.org
   IMAGE_NAME: ${CI_PROJECT_NAME}
   FTFY_PROJECT: "petclinic"
-  FTFY_BUILD: "$FTFY_PROJECT-$CI_COMMIT_BRANCH"
-  FTFY_FPR_FILE: "$CI_COMMIT_SHORT_SHA-gitlab_com-$FTFY_BUILD.fpr"
+  FTFY_BUILD: ${FTFY_PROJECT}-${CI_COMMIT_BRANCH}
+  FTFY_FPR_FILE: ${CI_COMMIT_SHORT_SHA}-gitlab_com-${FTFY_BUILD}.fpr
   FTFY_SSC_URL: "https://ssc.ekseed.org/ssc"
+  SCDAST_SETTINGS: "1b17660a-f565-4913-9b76-7e42d94e918c"
 
 
-SAST-scan:
-  stage: scan
+sast-scan:
+  stage: sast-scan
   script:
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b $FTFY_BUILD -clean
     - ./mvnw dependency:copy-dependencies
@@ -31,13 +32,36 @@ SAST-scan:
     - fortify-ubuntu
 
 
-SAST-upload:
-  stage: upload
+sast-upload:
+  stage: sast-upload
   dependencies:
-    - SAST-scan
+    - sast-scan
   script:
     - echo $FTFY_PROJECT
     - echo $CI_COMMIT_BRANCH
     - /fortify/SCA_21.2.1/bin/fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application $FTFY_PROJECT -applicationVersion $CI_COMMIT_BRANCH -file $FTFY_FPR_FILE
   tags:
     - fortify-ubuntu
+
+package_n_build:
+  stage: docker_deploy
+  dependencies:
+    - sast-scan
+  script:
+    - ./mvnw package
+    - docker build . -t docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
+    - docker run --name petclinic-$CI_COMMIT_SHORT_SHA --rm -p 8880:8080 docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
+  tags:
+    - fortify-ubuntu
+      
+dast-scan:
+  stage: dast-scan
+  image: docker.ekseed.org/fcli:ubuntu
+
+  script:
+    - fcli auth login ssc --url ${FTFY_SSC_URL} --token "${FTFY_ENC_TOKEN}"
+    - fcli dast sc-dast start -s  ${SCDAST_SETTINGS} --url http://fortify-ubuntu.ekseed.org:8880/ -n ${FTFY_BUILD} --format json
+
+  allow_failure: true
+
+

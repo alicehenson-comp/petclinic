@@ -11,20 +11,28 @@ FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 RUN apt-get update
 
 #Install java 11
-RUN apt-get install openjdk-11-jdk -y
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
-ENV JRE_HOME /usr/lib/jvm/java-11-openjdk-amd64
+RUN apt-get install openjdk-8-jdk -y
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JRE_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
-# Install git
-RUN apt-get install git -y
-
+# Install Tomcat
 WORKDIR /petclinic
+ARG TOMCAT_VERSION="7.0.109"
+ADD https://archive.apache.org/dist/tomcat/tomcat-7/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz .
+RUN tar -xvf apache-tomcat-${TOMCAT_VERSION}.tar.gz
+RUN rm apache-tomcat-${TOMCAT_VERSION}.tar.gz
+RUN mv apache-tomcat-${TOMCAT_VERSION} tomcat
+COPY catalina.properties tomcat/conf
 
-ADD target .
+#prepare SSC
+COPY target/petclinic.war /petclinic/tomcat/webapps
 
-RUN ls -al
+# Start tomcat at booting
+WORKDIR /petclinic/tomcat/bin
+RUN chmod +x catalina.sh
+CMD ./catalina.sh run
 
-ENTRYPOINT java -jar *.jar
+
 
 
 
