@@ -35,7 +35,7 @@ sast-upload:
   dependencies:
     - sast-scan
   script:
-    - /fortify/SCA_21.2.1/bin/fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application $FTFY_PROJECT -applicationVersion $CI_COMMIT_BRANCH -file "petclinic-${CI_COMMIT_BRANCH}.fpr"
+    - /fortify/SCA_21.2.1/bin/fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application petclinic -applicationVersion $CI_COMMIT_BRANCH -file "petclinic-${CI_COMMIT_BRANCH}.fpr"
   tags:
     - fortify-ubuntu
 
