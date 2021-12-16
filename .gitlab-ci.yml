@@ -45,8 +45,8 @@ package_n_build:
     - sast-scan
   script:
     - ./mvnw package
-    - docker build . -t docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
-    - docker run --name petclinic-$CI_COMMIT_SHORT_SHA --rm -p 8880:8080 docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
+    - sudo docker build . -t docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
+    - sudo docker run --name petclinic-$CI_COMMIT_SHORT_SHA --rm -p 8880:8080 docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
   tags:
     - fortify-ubuntu
       
