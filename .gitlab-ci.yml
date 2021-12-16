@@ -62,7 +62,7 @@ dast-scan:
 
   script:
     - fcli auth login ssc --url ${FTFY_SSC_URL} --token "${FTFY_ENC_TOKEN}"
-    - fcli dast sc-dast start -s  ${SCDAST_SETTINGS} --url http://fortify-ubuntu.ekseed.org:8880/ -n "petclinic-${CI_COMMIT_BRANCH}" --format json > start-output.txt
+    - fcli dast sc-dast start -s  ${SCDAST_SETTINGS} --url http://fortify-ubuntu.ekseed.org:8880/petclinic -n "petclinic-${CI_COMMIT_BRANCH}-$CI_COMMIT_SHORT_SHA" --format json > start-output.txt
     - 'scanid=$(cat start-output.txt | grep -oP "(?<=\"id\" : )\d*")'
     - echo "scan $scanid started"
     - fcli get sc-dast scan results -i $scanid -w
