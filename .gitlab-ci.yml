@@ -17,8 +17,8 @@ SAST-scan:
   stage: scan
   script:
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD -clean
-    - ./mvnw package
-    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD .
+    - ./mvnw dependency:copy-dependencies
+    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD -cp target/dependency/*.jar src
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD -show-files
     - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -b $FTFY_BUILD -scan -f $FTFY_FPR_FILE
   artifacts:
