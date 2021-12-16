@@ -29,6 +29,7 @@ sast-scan:
       - "petclinic-${CI_COMMIT_BRANCH}.fpr"
   tags:
     - fortify-ubuntu
+    - shell
 
 
 sast-upload:
@@ -39,6 +40,7 @@ sast-upload:
     - /fortify/SCA_21.2.1/bin/fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application petclinic -applicationVersion $CI_COMMIT_BRANCH -file "petclinic-${CI_COMMIT_BRANCH}.fpr"
   tags:
     - fortify-ubuntu
+    - shell
 
 package_n_start:
   stage: docker_start
@@ -52,6 +54,7 @@ package_n_start:
     - sudo docker run -d --name petclinic-$CI_COMMIT_SHORT_SHA --rm -p 8880:8080 docker.ekseed.org/petclinic:$CI_COMMIT_SHORT_SHA
   tags:
     - fortify-ubuntu
+    - shell
       
 dast-scan:
   stage: dast-scan
