@@ -1,6 +1,5 @@
 stages:
   - sast-scan
-  - sast-upload
   - docker_start
   - dast-scan
   - docker_stop
@@ -19,28 +18,16 @@ sast-scan:
     - >
       scancentral -sscurl https://ssc.ekseed.org/ssc -ssctoken 05d4e4ba-3907-4a1f-a1ec-51c66be32b43 
       start -upload -uptoken 05d4e4ba-3907-4a1f-a1ec-51c66be32b43 -application ${CI_PROJECT_NAME} -version $CI_COMMIT_BRANCH 
-      -block -o -f $FTFY_PROJECT-$CI_COMMIT_BRANCH.fpr --build-tool mvn --build-file pom.xml
+      -block -o -f ${CI_PROJECT_NAME}-$CI_COMMIT_BRANCH.fpr --build-tool mvn --build-file pom.xml
 
   artifacts:
     name: FPR_FILE
     paths:
-      - "petclinic-${CI_COMMIT_BRANCH}.fpr"
+      - "${CI_PROJECT_NAME}-${CI_COMMIT_BRANCH}.fpr"
   tags:
     - fortify-ubuntu
     - shell
 
-
-sast-upload:
-  stage: sast-upload
-  needs:
-    - sast-scan
-  dependencies:
-    - sast-scan
-  script:
-    - /fortify/SCA_21.2.1/bin/fortifyclient -debug -url $FTFY_SSC_URL -authtoken $FTFY_CI_TOKEN uploadFPR -application petclinic -applicationVersion $CI_COMMIT_BRANCH -file "petclinic-${CI_COMMIT_BRANCH}.fpr"
-  tags:
-    - fortify-ubuntu
-    - shell
 
 package_n_start:
   stage: docker_start
