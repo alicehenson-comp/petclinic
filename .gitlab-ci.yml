@@ -16,13 +16,11 @@ variables:
 sast-scan:
   stage: sast-scan
   script:
-    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -clean
-    - ./mvnw dependency:copy-dependencies
-    - ./mvnw package
-    - sudo chmod 777 -R *
-    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -cp lib/*.jar --exclude **/test/**/* .
-    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -show-files
-    - /fortify/SCA_21.2.1/bin/sourceanalyzer -verbose -debug -b "petclinic-${CI_COMMIT_BRANCH}" -scan -f "petclinic-${CI_COMMIT_BRANCH}.fpr"
+    - >
+      scancentral -sscurl https://ssc.ekseed.org/ssc -ssctoken 05d4e4ba-3907-4a1f-a1ec-51c66be32b43 
+      start -upload -uptoken 05d4e4ba-3907-4a1f-a1ec-51c66be32b43 -application ${CI_PROJECT_NAME} -version $CI_COMMIT_BRANCH 
+      -block -o -f $FTFY_PROJECT-$CI_COMMIT_BRANCH.fpr --build-tool mvn --build-file pom.xml
+
   artifacts:
     name: FPR_FILE
     paths:
