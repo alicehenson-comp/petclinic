@@ -62,7 +62,7 @@ package_n_start:
       
 dast-scan:
   stage: dast-scan
-  image: docker.ekseed.org/fcli:ubuntu
+  image: docker.ekseed.org/fcli
   needs:
     - package_n_start
   script:
