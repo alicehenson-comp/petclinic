@@ -14,7 +14,7 @@ variables:
 
 create_version:
   stage: create_version
-  image: docker.ekseed.org/gitlab-ci
+  image: docker.ekseed.org/gitlab-ci:linux
   script:
     - ssc-cli -s $FTFY_SSC_HOST -t $FTFY_ENC_TOKEN create -p ${FTFY_PROJECT} -v ${CI_COMMIT_REF_NAME}
   tags:
