@@ -31,7 +31,7 @@ sast-scan:
   script:
     - >
       scancentral -sscurl https://ssc.ekseed.org/ssc -ssctoken $FTFY_ESAST_TOKEN
-      start -upload -uptoken $FTFY_CI_TOKEN -application ${CI_PROJECT_NAME} -version $CI_COMMIT_BRANCH 
+      start -upload -uptoken $FTFY_CI_TOKEN -application ${FTFY_PROJECT} -version ${CI_COMMIT_REF_NAME}
       -block -o -f ${CI_PROJECT_NAME}-$CI_COMMIT_BRANCH.fpr --build-tool mvn --build-file pom.xml
 
   artifacts:
