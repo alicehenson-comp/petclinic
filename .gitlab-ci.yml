@@ -16,8 +16,8 @@ sast-scan:
   stage: sast-scan
   script:
     - >
-      scancentral -sscurl https://ssc.ekseed.org/ssc -ssctoken 05d4e4ba-3907-4a1f-a1ec-51c66be32b43 
-      start -upload -uptoken 05d4e4ba-3907-4a1f-a1ec-51c66be32b43 -application ${CI_PROJECT_NAME} -version $CI_COMMIT_BRANCH 
+      scancentral -sscurl https://ssc.ekseed.org/ssc -ssctoken $FTFY_ESAST_TOKEN
+      start -upload -uptoken $FTFY_CI_TOKEN -application ${CI_PROJECT_NAME} -version $CI_COMMIT_BRANCH 
       -block -o -f ${CI_PROJECT_NAME}-$CI_COMMIT_BRANCH.fpr --build-tool mvn --build-file pom.xml
 
   artifacts:
