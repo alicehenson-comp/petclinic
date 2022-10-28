@@ -8,9 +8,13 @@ stages:
 variables:
   DOCKER_REGISTRY: docker.ekseed.org
   IMAGE_NAME: ${CI_PROJECT_NAME}
-  FTFY_APPLICATION: "petclinic"
-  FTFY_SSC_URL: "https://ssc.ekseed.org/ssc"
-  SCDAST_SETTINGS: "1b17660a-f565-4913-9b76-7e42d94e918c"
+  FTFY_APPLICATION: "PetClinic"
+  SCDAST_SETTINGS: "43649822-4a65-4391-bd82-8d15886c941e"
+  FTFY_PROJECT: "PetClinic"
+  FTFY_BUILD: "$FTFY_PROJECT-$CI_COMMIT_BRANCH"
+  FTFY_FPR_FILE: "gitlab-$FTFY_BUILD.fpr"
+  IQ_APP: "petclinic"
+  IQ_STAGE: "build"
 
 create_version:
   stage: create_version
