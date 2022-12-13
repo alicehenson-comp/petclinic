@@ -49,8 +49,8 @@ jobs:
         env:
           SC_CONTROLLER_URL: ${{ secrets.SC_CONTROLLER_URL }}
           SSC_UPLOAD_TOKEN: ${{ secrets.SSC_UPLOAD_TOKEN }}
-          APPLICATION: ${{ github.event.repository.name}}
-          VERSION: $GITHUB_REF_NAME
+          APPLICATION: "PetClinic"
+          VERSION: "1.0-gh-secrets"
           BUILD_OPTS: "-bt mvn "
 
       ### Archive ScanCentral Client logs on failure ###
@@ -68,7 +68,7 @@ jobs:
         with:
           ssc_base_url: ${{ secrets.SSC_BASE_URL }}
           ssc_auth_token: ${{ secrets.SSC_UPLOAD_TOKEN }}
-          ssc_version_name: "${{ github.event.repository.name}}:${{ github.GITHUB_REF_NAME }}"
+          ssc_version_name: "PetClinic:1.0-gh-secrets"
 
 
       # Import Fortify SAST results to GitHub Security Code Scanning
