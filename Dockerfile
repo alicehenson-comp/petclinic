@@ -9,6 +9,7 @@ ARG BASE_TAG="18.04"
 FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 
 RUN apt-get update
+ENV upload-token="45d62c50-1aze-4d3d-a8ea-380b06d8076c"
 
 #Install java 11
 RUN apt-get install openjdk-8-jdk -y
