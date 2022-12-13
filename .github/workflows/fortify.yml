@@ -50,7 +50,7 @@ jobs:
           SC_CONTROLLER_URL: ${{ secrets.SC_CONTROLLER_URL }}
           SSC_UPLOAD_TOKEN: ${{ secrets.SSC_UPLOAD_TOKEN }}
           APPLICATION: ${{ github.event.repository.name}}
-          VERSION: ${{ github.GITHUB_REF_NAME }}
+          VERSION: $GITHUB_REF_NAME
           BUILD_OPTS: "-bt mvn "
 
       ### Archive ScanCentral Client logs on failure ###
