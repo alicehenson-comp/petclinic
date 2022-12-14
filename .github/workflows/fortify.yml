@@ -49,9 +49,9 @@ jobs:
         env:
           SC_CONTROLLER_URL: ${{ secrets.SC_CONTROLLER_URL }}
           SSC_UPLOAD_TOKEN: ${{ secrets.SSC_UPLOAD_TOKEN }}
-          APPLICATION: "BodgeIt"
-          VERSION: "1.0-gh-esast"
-          BUILD_OPTS: "-bt none "
+          APPLICATION: "PetClinic"
+          VERSION: "1.0-gh-secrets"
+          BUILD_OPTS: "-bt mvn "
 
       ### Archive ScanCentral Client logs on failure ###
       - name: Save ScanCentral Logs
@@ -62,13 +62,13 @@ jobs:
           path: ~/.fortify/scancentral/log
 
 
-            # Pull SAST issues from Fortify on Demand and generate GitHub-optimized SARIF output
+          # Pull SAST issues from Fortify on Demand and generate GitHub-optimized SARIF output
       - name: Export Results
         uses: fortify/gha-export-vulnerabilities@v1
         with:
           ssc_base_url: ${{ secrets.SSC_BASE_URL }}
           ssc_auth_token: ${{ secrets.SSC_UPLOAD_TOKEN }}
-          ssc_version_name: "BodgeIt:1.0-gh-esast"
+          ssc_version_name: "PetClinic:1.0-gh-secrets"
 
 
       # Import Fortify SAST results to GitHub Security Code Scanning
@@ -76,4 +76,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ./gh-fortify-sast.sarif
-
