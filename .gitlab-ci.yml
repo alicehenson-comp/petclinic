@@ -5,6 +5,7 @@ stages:
   - dast-scan
   - docker_stop
 
+
 variables:
   DOCKER_REGISTRY: docker.ekseed.org
   IMAGE_NAME: ${CI_PROJECT_NAME}
